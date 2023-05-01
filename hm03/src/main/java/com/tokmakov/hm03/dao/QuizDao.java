@@ -1,10 +1,9 @@
 package com.tokmakov.hm03.dao;
 
-import java.util.List;
-
-import com.tokmakov.hm03.exceptions.SourceReadException;
 import com.tokmakov.hm03.models.Question;
 
+import java.util.List;
+
 public interface QuizDao {
-    List<Question> findAllQuestions() throws SourceReadException;
+    List<Question> findAllQuestions();
 }

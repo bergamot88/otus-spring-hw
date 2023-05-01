@@ -1,0 +1,13 @@
+spring:
+    banner:
+        location: banner.txt
+    output:
+        ansi:
+            enabled: ALWAYS
+
+csv:
+    file:
+        name: questions.csv
+
+correct:
+    answers: 4

@@ -5,7 +5,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 @Component
-@PropertySource("classpath:application.properties")
+@PropertySource("classpath:application.yml")
 public class ApplcationConfigProperties implements ConfigProperties {
     private final int correctAnswersNumber;
     private final String csvFileWithQuestionsName;

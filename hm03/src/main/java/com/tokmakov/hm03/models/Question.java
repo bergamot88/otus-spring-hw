@@ -1,7 +1,10 @@
 package com.tokmakov.hm03.models;
 
+import lombok.Getter;
+
 import java.util.List;
 
+@Getter
 public class Question {
     private final int id;
     private final String question;
@@ -11,18 +14,6 @@ public class Question {
         this.id = id;
         this.question = question;
         this.answers = answers;
-    }
-
-    public String getQuestion() {
-        return question;
-    }
-
-    public List<Answer> getAnswers() {
-        return answers;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public boolean isCorrectAnswerById(int id) {

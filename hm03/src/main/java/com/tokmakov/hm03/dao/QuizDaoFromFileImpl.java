@@ -1,5 +1,11 @@
 package com.tokmakov.hm03.dao;
 
+import com.tokmakov.hm03.exceptions.SourceReadException;
+import com.tokmakov.hm03.models.Answer;
+import com.tokmakov.hm03.models.Question;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,13 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
-import com.tokmakov.hm03.exceptions.SourceReadException;
-import com.tokmakov.hm03.models.Answer;
-import com.tokmakov.hm03.models.Question;
 
 @Component
 public class QuizDaoFromFileImpl implements QuizDao {
@@ -26,7 +25,7 @@ public class QuizDaoFromFileImpl implements QuizDao {
     }
 
     @Override
-    public List<Question> findAllQuestions() throws SourceReadException {
+    public List<Question> findAllQuestions() {
         List<Question> questions = new ArrayList<>();
         InputStreamReader inputStreamReader = getInputStreamReaderForFile(csvFileWithQuestionsName);
 
@@ -65,29 +64,29 @@ public class QuizDaoFromFileImpl implements QuizDao {
                 questions.add(new Question(answerId, question, options));
             }
         } catch (IOException e) {
-            throw new SourceReadException("An error occurs when trying to read a file: " + 
-                csvFileWithQuestionsName, e.getCause());
+            throw new SourceReadException("An error occurs when trying to read a file: " +
+                csvFileWithQuestionsName, e);
         }
         return questions;
     }
 
-    private InputStreamReader getInputStreamReaderForFile(String fileName) throws SourceReadException {
+    private InputStreamReader getInputStreamReaderForFile(String fileName) {
         InputStreamReader inputStreamReader;
         InputStream inputStream = getInputStreamForFile(fileName);
         try {
             inputStreamReader = new InputStreamReader(inputStream);
         } catch (NullPointerException e) {
-            throw new SourceReadException("Couldn't read the file: " + csvFileWithQuestionsName, e.getCause());
+            throw new SourceReadException("Couldn't read the file: " + csvFileWithQuestionsName, e);
         }
         return inputStreamReader;
     }
 
-    private InputStream getInputStreamForFile(String fileName) throws SourceReadException {
+    private InputStream getInputStreamForFile(String fileName) {
         InputStream inputStream;
         try {
             inputStream = getClass().getClassLoader().getResourceAsStream(csvFileWithQuestionsName);
         } catch (NullPointerException e) {
-            throw new SourceReadException("Questions file not found: " + csvFileWithQuestionsName, e.getCause());
+            throw new SourceReadException("Questions file not found: " + csvFileWithQuestionsName, e);
         }
         return inputStream;
     }

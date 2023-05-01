@@ -10,6 +10,8 @@ import java.io.PrintStream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.tokmakov.hm03.services.impl.IOServiceImpl;
+
 public class IOServiceImplTest {
     private static final String TEXT_TO_PRINT = "Hello print";
     private static final String TEXT_TO_READ = "Hello read";

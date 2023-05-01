@@ -1,5 +1,8 @@
 package com.tokmakov.hm03.models;
 
+import lombok.Getter;
+
+@Getter
 public class Answer {
     private final int id;
     private final boolean isCorrectAnswer;
@@ -11,15 +14,7 @@ public class Answer {
         this.content = content;
     }
 
-    public int getId() {
-        return id;
-    }
-
     public boolean isCorrectAnswer() {
         return isCorrectAnswer;
-    }
-
-    public String getContent() {
-        return content;
     }
 }
