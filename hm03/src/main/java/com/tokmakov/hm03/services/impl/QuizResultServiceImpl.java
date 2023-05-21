@@ -3,6 +3,7 @@ package com.tokmakov.hm03.services.impl;
 import com.tokmakov.hm03.config.ConfigProperties;
 import com.tokmakov.hm03.models.Question;
 import com.tokmakov.hm03.services.IOService;
+import com.tokmakov.hm03.services.LocalizationService;
 import com.tokmakov.hm03.services.QuizResultService;
 import org.springframework.stereotype.Service;
 
@@ -13,21 +14,26 @@ public class QuizResultServiceImpl implements QuizResultService {
 
     private final IOService ioService;
     private final ConfigProperties quizProperties;
+    private final LocalizationService localizationService;
 
     public QuizResultServiceImpl(ConfigProperties quizProperties, 
-                                IOService ioService) {
+                                IOService ioService,
+                                LocalizationService localizationService) {
         this.quizProperties = quizProperties;
         this.ioService = ioService;
+        this.localizationService = localizationService;
     }
 
     @Override
     public void showResult(int userCorrectAnswersNumber) {
-        ioService.outln(String.format("You result: %s ", userCorrectAnswersNumber));
+        ioService.outln(
+            localizationService.getLocalizationMessage("you.result", userCorrectAnswersNumber)
+        );
         int correctAnswersNumber = quizProperties.getCorrectAnswersNumber();
         if(userCorrectAnswersNumber < correctAnswersNumber) {
-            ioService.outln("YOU FAIL");
+            ioService.outln(localizationService.getLocalizationMessage("you.fail"));
         } else {
-            ioService.outln("YOU PASS");
+            ioService.outln(localizationService.getLocalizationMessage("you.pass"));
         }
     }
 
@@ -41,7 +47,7 @@ public class QuizResultServiceImpl implements QuizResultService {
                 isCorrectInput = true;
             } catch (NoSuchElementException e) {
                 isCorrectInput = false;
-                ioService.outln("You entered a number that does not exist");
+                ioService.outln(localizationService.getLocalizationMessage("exception.number.not.exit"));
             }
         } while(!isCorrectInput);
         return isCorrectAnswer;

@@ -6,7 +6,7 @@ $ mvn package
 
 2. Run application
 ```
-$ java -jar target/hm03-0.0.1-SNAPSHOT.jar
+$ mvn spring-boot:run
 ```
 
 3. Run tests

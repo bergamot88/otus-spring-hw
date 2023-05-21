@@ -4,10 +4,15 @@ spring:
     output:
         ansi:
             enabled: ALWAYS
+    messages:
+        basename: i18n/quizmessages
+        encoding: UTF-8
 
 csv:
     file:
-        name: questions.csv
+        name: questions
 
 correct:
     answers: 4
+
+locale: ru_RU

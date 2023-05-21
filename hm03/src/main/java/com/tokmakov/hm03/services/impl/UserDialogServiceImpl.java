@@ -4,6 +4,7 @@ import com.tokmakov.hm03.models.Question;
 import com.tokmakov.hm03.models.User;
 import com.tokmakov.hm03.models.UserQuizResult;
 import com.tokmakov.hm03.services.IOService;
+import com.tokmakov.hm03.services.LocalizationService;
 import com.tokmakov.hm03.services.QuizResultService;
 import com.tokmakov.hm03.services.UserDialogService;
 import org.springframework.stereotype.Service;
@@ -15,26 +16,30 @@ public class UserDialogServiceImpl implements UserDialogService {
 
     private final IOService ioService;
     private final QuizResultService quizResultService;
+    private final LocalizationService localizationService;
 
-    public UserDialogServiceImpl(IOService ioService, QuizResultService quizResultService) {
+    public UserDialogServiceImpl(IOService ioService, 
+                                 QuizResultService quizResultService,
+                                 LocalizationService localizationService) {
         this.ioService = ioService;
         this.quizResultService = quizResultService;
+        this.localizationService = localizationService;
     }
 
     @Override
     public User askUserName() {
-        ioService.outln("\nPlease input you first name");
+        ioService.outln(localizationService.getLocalizationMessage("input.first.name"));
         String firstName = ioService.readString();
-        ioService.outln("\nPlease input you last name");
+        ioService.outln(localizationService.getLocalizationMessage("input.last.name"));
         String lastName = ioService.readString();
         return new User(firstName, lastName);
     }
 
     @Override
     public void sayHelloToUser(User user) {
-        ioService.outln(String.format("\nHello %s %s !\n",
+        ioService.outln(localizationService.getLocalizationMessage("hello.user", 
             user.getFirstName(), user.getLastName()));
-        ioService.outln("Start testinng\n");
+        ioService.outln(localizationService.getLocalizationMessage("start.testing"));
     }
 
     @Override
@@ -59,7 +64,7 @@ public class UserDialogServiceImpl implements UserDialogService {
                 isCorrectInput = true;
             } catch (NumberFormatException e) {
                 isCorrectInput = false;
-                ioService.outln("You entered the wrong value. Only numbers are allowed");
+                ioService.outln(localizationService.getLocalizationMessage("wrong.answer.type"));
             }
         } while(!isCorrectInput);
         return userAnswer;
