@@ -5,6 +5,7 @@ import com.tokmakov.hw09.domain.Genre;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -25,8 +26,8 @@ public class GenreDaoJdbc implements GenreDao {
     @Override
     public Genre insert(Genre genre) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        namedParameterJdbcTemplate.update("INSERT INTO genre (name) VALUES (:name)",
-                genre.getAsArgs(), keyHolder);
+        MapSqlParameterSource params = new MapSqlParameterSource().addValue("name", genre.getName());
+        namedParameterJdbcTemplate.update("INSERT INTO genre (name) VALUES (:name)", params, keyHolder);
         return new Genre(keyHolder.getKey().longValue(), genre.getName());
     }
 

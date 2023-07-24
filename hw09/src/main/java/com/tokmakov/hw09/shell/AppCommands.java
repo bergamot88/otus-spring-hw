@@ -3,6 +3,7 @@ package com.tokmakov.hw09.shell;
 import com.tokmakov.hw09.domain.Author;
 import com.tokmakov.hw09.domain.Book;
 import com.tokmakov.hw09.domain.Genre;
+import com.tokmakov.hw09.exception.CollectionEmptyException;
 import com.tokmakov.hw09.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
@@ -25,7 +26,7 @@ public class AppCommands {
         Genre genre = new Genre(genreName);
         Book book = new Book(bookLabel, author, genre);
         book = bookService.add(book);
-        return "You add new book: " + book.toString();
+        return String.format("You add new book: %s", getFormattedBookInfo(book));
     }
 
     @ShellMethod(value = "Update book label", key = "update_book_label")
@@ -38,7 +39,11 @@ public class AppCommands {
     @ShellMethod(value = "Get books list", key = "get_books_list")
     public String getBooksList() {
         StringBuffer stringBuffer = new StringBuffer();
-        bookService.findAll().forEach(f -> stringBuffer.append(f.toString()).append("\n"));
+        try {
+            bookService.findAll().forEach(book -> stringBuffer.append(getFormattedBookInfo(book)).append("\n"));
+        } catch (CollectionEmptyException e) {
+            return "Library is empty";
+        }
         return stringBuffer.toString();
     }
 
@@ -50,7 +55,7 @@ public class AppCommands {
         } catch (NoSuchElementException exception) {
             return String.format("Book with id %s not found", id);
         }
-        return String.format(book.toString());
+        return getFormattedBookInfo(book);
     }
 
     @ShellMethod(value = "Delete book with label and author", key = "delete_book_label_and_author")
@@ -66,7 +71,11 @@ public class AppCommands {
                     bookLabel, authorFirstName, authorLastName);
         }
         bookService.deleteById(book.getId());
-        return String.format("Book '%s' - %s %s has been deleted",
-                bookLabel, authorFirstName, authorLastName);
+        return String.format("Book %s has been deleted", getFormattedBookInfo(book));
+    }
+
+    private String getFormattedBookInfo(Book book) {
+        return String.format("'%s' - %s %s", book.getLabel(), book.getAuthor().getFirstName(),
+                book.getAuthor().getLastName());
     }
 }

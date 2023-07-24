@@ -14,7 +14,6 @@ import java.util.Optional;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @JdbcTest
 @Import(BookDaoJdbc.class)
@@ -61,7 +60,6 @@ public class BookDaoJdbcTest {
         List<Book> expectedBooks = List.of(
                 new Book(EXIST_BOOK_ID, EXIST_BOOK_LABEL, EXIST_AUTHOR, EXIST_GENRE));
         List<Book> books = bookDaoJdbc.getAll();
-        assertFalse(books.isEmpty());
         assertThat(books, equalTo(expectedBooks));
     }
 

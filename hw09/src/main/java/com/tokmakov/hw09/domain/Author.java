@@ -1,7 +1,6 @@
 package com.tokmakov.hw09.domain;
 
 import lombok.Data;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 
 @Data
 public class Author {
@@ -19,12 +18,5 @@ public class Author {
     public Author(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
-    }
-
-    public MapSqlParameterSource getAsArgs() {
-        return new MapSqlParameterSource()
-                .addValue("id", this.id)
-                .addValue("firstName", this.firstName)
-                .addValue("lastName", this.lastName);
     }
 }

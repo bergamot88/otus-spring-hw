@@ -1,7 +1,6 @@
 package com.tokmakov.hw09.domain;
 
 import lombok.Data;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 
 
 @Data
@@ -26,20 +25,5 @@ public class Book {
         this.label = label;
         this.author = author;
         this.genre = genre;
-    }
-
-    public MapSqlParameterSource getAsArgs() {
-        return new MapSqlParameterSource()
-                .addValue("id", this.id)
-                .addValue("label", this.label)
-                .addValue("author_id", author.getId())
-                .addValue("genre_id", genre.getId());
-    }
-
-    public String toString() {
-        return String.format("'%s' - %s %s",
-                this.label,
-                this.author.getFirstName(),
-                this.author.getLastName());
     }
 }

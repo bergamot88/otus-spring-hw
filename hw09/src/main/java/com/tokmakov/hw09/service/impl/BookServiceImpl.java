@@ -4,6 +4,7 @@ import com.tokmakov.hw09.dao.BookDao;
 import com.tokmakov.hw09.domain.Author;
 import com.tokmakov.hw09.domain.Book;
 import com.tokmakov.hw09.domain.Genre;
+import com.tokmakov.hw09.exception.CollectionEmptyException;
 import com.tokmakov.hw09.service.AuthorService;
 import com.tokmakov.hw09.service.BookService;
 import com.tokmakov.hw09.service.GenreService;
@@ -45,7 +46,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> findAll() {
+    public List<Book> findAll() throws CollectionEmptyException {
         return bookDao.getAll();
     }
 

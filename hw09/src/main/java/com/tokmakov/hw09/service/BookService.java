@@ -1,6 +1,7 @@
 package com.tokmakov.hw09.service;
 
 import com.tokmakov.hw09.domain.Book;
+import com.tokmakov.hw09.exception.CollectionEmptyException;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,7 +13,7 @@ public interface BookService {
 
     void updateBookNameById(Long id, String newName);
 
-    List<Book> findAll();
+    List<Book> findAll() throws CollectionEmptyException;
 
     Optional<Book> findByLabelAndAuthor(String label, String authorFirstName, String authorLastName);
 

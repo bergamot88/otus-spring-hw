@@ -5,6 +5,7 @@ import com.tokmakov.hw09.domain.Author;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -40,9 +41,11 @@ public class AuthorDaoJdbc implements AuthorDao {
     @Override
     public Author insert(Author author) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("firstName", author.getFirstName())
+                .addValue("lastName", author.getLastName());
         namedParameterJdbcTemplate.update("INSERT INTO author (first_name, last_name) " +
-                        "VALUES (:firstName, :lastName)",
-                author.getAsArgs(), keyHolder);
+                        "VALUES (:firstName, :lastName)", params, keyHolder);
         return new Author(keyHolder.getKey().longValue(), author.getFirstName(), author.getLastName());
     }
 

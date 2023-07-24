@@ -4,9 +4,11 @@ import com.tokmakov.hw09.dao.BookDao;
 import com.tokmakov.hw09.domain.Author;
 import com.tokmakov.hw09.domain.Book;
 import com.tokmakov.hw09.domain.Genre;
+import com.tokmakov.hw09.exception.CollectionEmptyException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -28,9 +30,12 @@ public class BookDaoJdbc implements BookDao {
     @Override
     public Book insert(Book book) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("label", book.getLabel())
+                .addValue("author_id", book.getAuthor().getId())
+                .addValue("genre_id", book.getGenre().getId());
         namedParameterJdbcTemplate.update("INSERT INTO book (label, author_id, genre_id) " +
-                                              "VALUES (:label, :author_id, :genre_id)",
-                                               book.getAsArgs(), keyHolder);
+                                              "VALUES (:label, :author_id, :genre_id)", params, keyHolder);
         return new Book(keyHolder.getKey().longValue(), book.getLabel(), book.getAuthor(), book.getGenre());
     }
 
@@ -48,7 +53,7 @@ public class BookDaoJdbc implements BookDao {
     }
 
     @Override
-    public List<Book> getAll() {
+    public List<Book> getAll() throws CollectionEmptyException {
         List<Book> books;
         try {
             books = namedParameterJdbcTemplate.query(
@@ -59,7 +64,7 @@ public class BookDaoJdbc implements BookDao {
                          "JOIN genre ON genre.id = book.genre_id",
                     new BookMapper());
         } catch (DataAccessException exception) {
-            return Collections.emptyList();
+            throw new CollectionEmptyException(exception.getMessage(), exception.getCause());
         }
         return books;
     }
