@@ -6,5 +6,6 @@ import java.util.Optional;
 
 public interface GenreService {
     Optional<Genre> findFirst(Genre genre);
+
     Genre add(Genre genre);
 }

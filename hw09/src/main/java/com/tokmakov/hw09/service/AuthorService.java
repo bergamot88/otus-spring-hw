@@ -6,5 +6,6 @@ import java.util.Optional;
 
 public interface AuthorService {
     Optional<Author> findFirst(Author author);
+
     Author add(Author author);
 }

@@ -19,7 +19,9 @@ import java.util.Optional;
 public class BookServiceImpl implements BookService {
 
     private final BookDao bookDao;
+
     private final AuthorService authorService;
+
     private final GenreService genreService;
 
     @Override

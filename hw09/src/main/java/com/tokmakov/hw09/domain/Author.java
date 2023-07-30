@@ -6,7 +6,9 @@ import lombok.Data;
 public class Author {
 
     private Long id;
+
     private String firstName;
+
     private String lastName;
 
     public Author(Long id, String firstName, String lastName) {

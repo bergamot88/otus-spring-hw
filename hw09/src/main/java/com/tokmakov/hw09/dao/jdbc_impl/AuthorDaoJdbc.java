@@ -20,6 +20,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AuthorDaoJdbc implements AuthorDao {
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    
     @Override
     public Optional<Author> getByFirstAndLastNames(String firstName, String lastName) {
         Map<String, Object> params = Map.of("firstName", firstName,
