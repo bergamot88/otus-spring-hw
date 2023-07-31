@@ -2,10 +2,11 @@ package com.tokmakov.hw09.service.impl;
 
 import com.tokmakov.hw09.dao.AuthorDao;
 import com.tokmakov.hw09.domain.Author;
+import com.tokmakov.hw09.service.AuthorService;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Optional;
 
@@ -14,21 +15,21 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@SpringBootTest(classes = AuthorServiceImpl.class)
 public class AuthorServiceImplTest {
 
-    @Mock
+    @MockBean
     private AuthorDao authorDao;
 
-    @InjectMocks
-    private AuthorServiceImpl authorService;
+    @Autowired
+    private AuthorService authorService;
 
     private static final Long EXIST_AUTHOR_ID = 1L;
     private static final String EXIST_AUTHOR_FIRST_NAME = "Alexander";
     private static final String EXIST_AUTHOR_LAST_NAME = "Zinoviev";
 
-    private static final String NEW_AUTHOR_FIRST_NAME = "Eduard";
-    private static final String NEW_AUTHOR_LAST_NAME = "Limonov";
+    private static final String NEW_AUTHOR_FIRST_NAME = "Eduard1";
+    private static final String NEW_AUTHOR_LAST_NAME = "Limonov1";
 
     @Test
     void testFindFirst() {

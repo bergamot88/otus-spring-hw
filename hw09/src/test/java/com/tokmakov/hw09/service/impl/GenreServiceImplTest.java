@@ -2,10 +2,12 @@ package com.tokmakov.hw09.service.impl;
 
 import com.tokmakov.hw09.dao.GenreDao;
 import com.tokmakov.hw09.domain.Genre;
+import com.tokmakov.hw09.service.GenreService;
+
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Optional;
 
@@ -14,14 +16,14 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@SpringBootTest(classes = GenreServiceImpl.class)
 public class GenreServiceImplTest {
 
-    @Mock
+    @MockBean
     private GenreDao genreDao;
 
-    @InjectMocks
-    private GenreServiceImpl genreService;
+    @Autowired
+    private GenreService genreService;
 
     private static final String EXIST_GENRE_NAME = "Philosophy";
     private static final Long EXIST_GENRE_ID = 1L;
