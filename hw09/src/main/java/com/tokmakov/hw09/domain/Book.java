@@ -26,4 +26,9 @@ public class Book {
         this.author = author;
         this.genre = genre;
     }
+
+    public Book(String label, Author author) {
+        this.label = label;
+        this.author = author;
+    }
 }

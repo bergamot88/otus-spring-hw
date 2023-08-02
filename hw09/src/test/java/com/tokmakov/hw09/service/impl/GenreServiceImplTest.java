@@ -3,7 +3,6 @@ package com.tokmakov.hw09.service.impl;
 import com.tokmakov.hw09.dao.GenreDao;
 import com.tokmakov.hw09.domain.Genre;
 import com.tokmakov.hw09.service.GenreService;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

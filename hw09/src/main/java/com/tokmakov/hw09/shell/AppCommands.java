@@ -4,18 +4,22 @@ import com.tokmakov.hw09.domain.Author;
 import com.tokmakov.hw09.domain.Book;
 import com.tokmakov.hw09.domain.Genre;
 import com.tokmakov.hw09.exception.CollectionEmptyException;
+import com.tokmakov.hw09.service.BookConverterService;
 import com.tokmakov.hw09.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @ShellComponent
 @RequiredArgsConstructor
 public class AppCommands {
     private final BookService bookService;
+
+    private final BookConverterService converter;
 
     @ShellMethod(value = "Add book", key = "add_book")
     public String addBook(@ShellOption("book_label") String bookLabel,
@@ -26,7 +30,7 @@ public class AppCommands {
         Genre genre = new Genre(genreName);
         Book book = new Book(bookLabel, author, genre);
         book = bookService.add(book);
-        return String.format("You add new book: %s", getFormattedBookInfo(book));
+        return "You add new book: " + converter.convertToString(book);
     }
 
     @ShellMethod(value = "Update book label", key = "update_book_label")
@@ -38,13 +42,13 @@ public class AppCommands {
 
     @ShellMethod(value = "Get books list", key = "get_books_list")
     public String getBooksList() {
-        StringBuffer stringBuffer = new StringBuffer();
+        List<Book> books;
         try {
-            bookService.findAll().forEach(book -> stringBuffer.append(getFormattedBookInfo(book)).append("\n"));
+            books = bookService.findAll();
         } catch (CollectionEmptyException e) {
             return "Library is empty";
         }
-        return stringBuffer.toString();
+        return converter.convertToString(books);
     }
 
     @ShellMethod(value = "Get book by id", key = "get_book_by_id")
@@ -55,27 +59,21 @@ public class AppCommands {
         } catch (NoSuchElementException exception) {
             return String.format("Book with id %s not found", id);
         }
-        return getFormattedBookInfo(book);
+        return converter.convertToString(book);
     }
 
     @ShellMethod(value = "Delete book with label and author", key = "delete_book_label_and_author")
     public String deleteBookWithLabelAndAuthor(@ShellOption("book_label") String bookLabel,
                                              @ShellOption("author_first_name") String authorFirstName,
                                              @ShellOption("author_last_name") String authorLastName) {
-        Book book;
+        Book book = new Book(bookLabel, new Author(authorFirstName, authorLastName));
         try {
             book = bookService.findByLabelAndAuthor(bookLabel, authorFirstName, authorLastName)
                               .orElseThrow();
         } catch (NoSuchElementException exception) {
-            return String.format("Book '%s' - %s %s not found. There's nothing to delete",
-                    bookLabel, authorFirstName, authorLastName);
+            return String.format("Book %s not found. There's nothing to delete", converter.convertToString(book));
         }
         bookService.deleteById(book.getId());
-        return String.format("Book %s has been deleted", getFormattedBookInfo(book));
-    }
-
-    private String getFormattedBookInfo(Book book) {
-        return String.format("'%s' - %s %s", book.getLabel(), book.getAuthor().getFirstName(),
-                book.getAuthor().getLastName());
+        return String.format("Book %s has been deleted", converter.convertToString(book));
     }
 }
