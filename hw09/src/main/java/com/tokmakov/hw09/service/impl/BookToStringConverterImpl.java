@@ -7,16 +7,18 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class BookConverterServiceImpl implements BookConverterService {
+public class BookToStringConverterImpl implements BookConverterService<String> {
 
-    public String convertToString(Book book) {
+    @Override
+    public String convert(Book book) {
         return String.format("'%s' - %s %s", book.getLabel(), book.getAuthor().getFirstName(),
                 book.getAuthor().getLastName());
     }
 
-    public String convertToString(List<Book> books) {
+    @Override
+    public String convert(List<Book> books) {
         StringBuilder stringBuilder = new StringBuilder();
-        books.forEach(book -> stringBuilder.append(convertToString(book))
+        books.forEach(book -> stringBuilder.append(this.convert(book))
                                            .append(System.lineSeparator()));
         return stringBuilder.toString();
     }

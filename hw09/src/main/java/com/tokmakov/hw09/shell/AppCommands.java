@@ -19,7 +19,7 @@ import java.util.NoSuchElementException;
 public class AppCommands {
     private final BookService bookService;
 
-    private final BookConverterService converter;
+    private final BookConverterService<String> bookConverter;
 
     @ShellMethod(value = "Add book", key = "add_book")
     public String addBook(@ShellOption("book_label") String bookLabel,
@@ -30,7 +30,7 @@ public class AppCommands {
         Genre genre = new Genre(genreName);
         Book book = new Book(bookLabel, author, genre);
         book = bookService.add(book);
-        return "You add new book: " + converter.convertToString(book);
+        return "You add new book: " + bookConverter.convert(book);
     }
 
     @ShellMethod(value = "Update book label", key = "update_book_label")
@@ -48,7 +48,7 @@ public class AppCommands {
         } catch (CollectionEmptyException e) {
             return "Library is empty";
         }
-        return converter.convertToString(books);
+        return bookConverter.convert(books);
     }
 
     @ShellMethod(value = "Get book by id", key = "get_book_by_id")
@@ -59,7 +59,7 @@ public class AppCommands {
         } catch (NoSuchElementException exception) {
             return String.format("Book with id %s not found", id);
         }
-        return converter.convertToString(book);
+        return bookConverter.convert(book);
     }
 
     @ShellMethod(value = "Delete book with label and author", key = "delete_book_label_and_author")
@@ -71,9 +71,9 @@ public class AppCommands {
             book = bookService.findByLabelAndAuthor(bookLabel, authorFirstName, authorLastName)
                               .orElseThrow();
         } catch (NoSuchElementException exception) {
-            return String.format("Book %s not found. There's nothing to delete", converter.convertToString(book));
+            return String.format("Book %s not found. There's nothing to delete", bookConverter.convert(book));
         }
         bookService.deleteById(book.getId());
-        return String.format("Book %s has been deleted", converter.convertToString(book));
+        return String.format("Book %s has been deleted", bookConverter.convert(book));
     }
 }
