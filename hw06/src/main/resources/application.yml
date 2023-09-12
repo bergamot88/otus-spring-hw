@@ -2,15 +2,17 @@ spring:
   datasource:
     url: jdbc:h2:mem:book_library
     username: sa
+
   sql:
     init:
       mode: always
+
   jpa:
+    show-sql: true
     generate-ddl: false
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create
+
     properties:
       hibernate:
-        show_sql: true
         format_sql: true
-    show-sql: true

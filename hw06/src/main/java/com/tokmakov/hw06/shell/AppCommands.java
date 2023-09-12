@@ -36,7 +36,7 @@ public class AppCommands {
     @ShellMethod(value = "Update book label", key = "update_book_label")
     public String updateBookLabel(@ShellOption("id") Long id,
                                   @ShellOption("new_label") String newLabel) {
-        bookService.updateBookNameById(id, newLabel);
+        bookService.updateBookLabelById(id, newLabel);
         return "Book label was updated";
     }
 

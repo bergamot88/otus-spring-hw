@@ -9,9 +9,9 @@ import java.util.Optional;
 public interface BookRepository {
     Book insert(Book book);
 
-    void updateNameById(Long id, String newLabel);
+    Book update(Book book);
 
-    void deleteById(Long id);
+    void remove(Book book);
 
     List<Book> getAll() throws CollectionEmptyException;
 

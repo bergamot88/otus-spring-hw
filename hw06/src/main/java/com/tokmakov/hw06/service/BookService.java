@@ -3,6 +3,7 @@ package com.tokmakov.hw06.service;
 import com.tokmakov.hw06.domain.Book;
 import com.tokmakov.hw06.exception.CollectionEmptyException;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,7 +12,7 @@ public interface BookService {
 
     void deleteById(Long id);
 
-    void updateBookNameById(Long id, String newName);
+    Book updateBookLabelById(Long id, String newName) throws EntityNotFoundException;
 
     List<Book> findAll() throws CollectionEmptyException;
 

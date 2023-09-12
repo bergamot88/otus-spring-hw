@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,13 +43,16 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public void deleteById(Long id) {
-        bookRepository.deleteById(id);
+        Book book = findById(id).orElseThrow();
+        bookRepository.remove(book);
     }
 
     @Override
     @Transactional
-    public void updateBookNameById(Long id, String newLabel) {
-        bookRepository.updateNameById(id, newLabel);
+    public Book updateBookLabelById(Long id, String newLabel) throws EntityNotFoundException {
+        Book book = findById(id).orElseThrow();
+        book.setLabel(newLabel);
+        return bookRepository.update(book);
     }
 
     @Override

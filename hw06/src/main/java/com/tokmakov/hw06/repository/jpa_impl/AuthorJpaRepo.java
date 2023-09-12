@@ -36,6 +36,6 @@ public class AuthorJpaRepo implements AuthorRepository {
     @Override
     public Author insert(Author author) {
         entityManager.persist(author);
-        return null;
+        return author;
     }
 }

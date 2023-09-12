@@ -6,35 +6,49 @@ import com.tokmakov.hw06.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityGraph;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
+
+import static org.springframework.data.jpa.repository.EntityGraph.EntityGraphType.FETCH;
 
 @Repository
 @RequiredArgsConstructor
 public class BookJpaRepo implements BookRepository {
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
     @Override
     public Book insert(Book book) {
-        return null;
+        entityManager.persist(book);
+        return book;
     }
 
     @Override
-    public void updateNameById(Long id, String newLabel) {
-
+    public Book update(Book book) {
+        return entityManager.merge(book);
     }
 
     @Override
-    public void deleteById(Long id) {
-
+    public void remove(Book book) {
+        entityManager.remove(book);
     }
 
     @Override
     public List<Book> getAll() throws CollectionEmptyException {
-        return null;
+        EntityGraph<?> graph = entityManager.getEntityGraph("books_genres_graph");
+        TypedQuery<Book> query = entityManager.createQuery("SELECT b FROM book b", Book.class);
+        query.setHint("jakarta.persistence.fetchgraph", graph);
+        return query.getResultList();
     }
 
     @Override
     public Optional<Book> getById(Long id) {
-        return Optional.empty();
+        return Optional.ofNullable(entityManager.find(Book.class, id));
     }
 
     @Override
