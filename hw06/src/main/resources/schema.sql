@@ -12,5 +12,5 @@ CREATE TABLE book(
     label VARCHAR(100),
     author_id BIGINT,
     genre_id BIGINT,
-    FOREIGN KEY (author_id) references author(id),
-    FOREIGN KEY (genre_id) references genre(id));
+    FOREIGN KEY (author_id) REFERENCES author(id),
+    FOREIGN KEY (genre_id) REFERENCES genre(id));

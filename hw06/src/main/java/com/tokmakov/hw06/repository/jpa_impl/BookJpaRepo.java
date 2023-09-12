@@ -1,5 +1,6 @@
 package com.tokmakov.hw06.repository.jpa_impl;
 
+import com.tokmakov.hw06.domain.Author;
 import com.tokmakov.hw06.domain.Book;
 import com.tokmakov.hw06.exception.CollectionEmptyException;
 import com.tokmakov.hw06.repository.BookRepository;
@@ -40,9 +41,9 @@ public class BookJpaRepo implements BookRepository {
 
     @Override
     public List<Book> getAll() throws CollectionEmptyException {
-        EntityGraph<?> graph = entityManager.getEntityGraph("books_genres_graph");
-        TypedQuery<Book> query = entityManager.createQuery("SELECT b FROM book b", Book.class);
-        query.setHint("jakarta.persistence.fetchgraph", graph);
+        EntityGraph<?> entityGraph = entityManager.getEntityGraph("book-author-genre-graph");
+        TypedQuery<Book> query = entityManager.createQuery("SELECT b FROM Book b", Book.class);
+        query.setHint("jakarta.persistence.fetchgraph", entityGraph);
         return query.getResultList();
     }
 
@@ -53,6 +54,17 @@ public class BookJpaRepo implements BookRepository {
 
     @Override
     public Optional<Book> getByLabelAndAuthor(String label, String authorFirstName, String authorLastName) {
-        return Optional.empty();
+        TypedQuery<Book> query = entityManager.createQuery(
+                "SELECT b " +
+                        "FROM Book b " +
+                        "JOIN FETCH b.author " +
+                        "JOIN FETCH b.genre " +
+                        "WHERE b.label = :label " +
+                        "AND Author.firstName = :authorFirstName " +
+                        "AND Author.lastName = :authorLastName", Book.class);
+        query.setParameter("label", label);
+        query.setParameter("authorFirstName", authorFirstName);
+        query.setParameter("authorLastName", authorLastName);
+        return Optional.ofNullable(query.getSingleResult());
     }
 }

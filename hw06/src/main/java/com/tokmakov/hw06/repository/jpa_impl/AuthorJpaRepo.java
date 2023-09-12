@@ -20,17 +20,11 @@ public class AuthorJpaRepo implements AuthorRepository {
 
     @Override
     public Optional<Author> getByFirstAndLastNames(String firstName, String lastName) {
-        Optional<Author> authorOptional;
         TypedQuery<Author> query = entityManager.createQuery(
-                "SELECT book FROM Book book WHERE first_name = :firstName AND last_name = :lastName", Author.class);
-        query.setParameter("firstName", firstName);
-        query.setParameter("lastName", lastName);
-        try {
-            authorOptional = Optional.of(query.getSingleResult());
-        } catch (NoResultException e) {
-            return Optional.empty();
-        }
-        return authorOptional;
+                "SELECT a FROM Author a WHERE a.firstName = :first_name AND a.lastName = :last_name", Author.class);
+        query.setParameter("first_name", firstName);
+        query.setParameter("last_name", lastName);
+        return Optional.ofNullable(query.getSingleResult());
     }
 
     @Override
