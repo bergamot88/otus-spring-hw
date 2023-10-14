@@ -1,0 +1,19 @@
+jwt:
+  private:
+    key: classpath:private.key
+  public:
+    key: classpath:public_key.pub
+
+server:
+  port: 8090
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/fuzzing_pantry
+    driver-class-name: org.postgresql.Driver
+    username: fuzzing
+    password: fuzz
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+#    generate-ddl: true
+#    hibernate.ddl-auto: create
